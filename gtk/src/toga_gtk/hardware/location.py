@@ -48,9 +48,13 @@ KNOWN_PERMISSION_ERRORS = [
 ]
 
 if Flatpak is not None:
-    KNOWN_PERMISSION_ERRORS.append(
-        (Flatpak.PortalError.quark(), Flatpak.PortalError.NOT_ALLOWED),
-    )
+    try:
+        KNOWN_PERMISSION_ERRORS.append(
+            (Flatpak.PortalError.quark(), Flatpak.PortalError.NOT_ALLOWED),
+        )
+    except:
+        # In case of broken or incomplete Flatpak install, don't use Flatpak
+        Flatpak = None
 else:  # pragma: no cover
     # Non-sandboxed and no Flatpak library installed. That's a valid system
     # configuration, but there's no meaningful way to test it; it can just be ignored
